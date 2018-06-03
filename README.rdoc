@@ -1,0 +1,15 @@
+= redmine_issue_burndown_chart plug-in
+
+This is a redmine plugin for showing burndown chart by an issue using remaining effort.
+On installation, it adds custom field to input remaining effort that you must keep as it is.
+The field name is like RemainXXXX in order to avoid naming conflict.
+When you enable this module for a project, you can input the remaining effort on an issue.
+The burdown chart uses estimate effort and remaining efforts that should be updated if you make progress.
+
+== Installation
+
+* Clone into your plugins folder: <code>git clone https://github.com/dayan888/redmine_issue_burndown_chart.git</code>
+* Run <code>bundle install</code>
+* Run <code>bundle exec rake redmine:plugins:migrate RAILS_ENV=production</code>
+* Restart Redmine
+

@@ -1,0 +1,11 @@
+# English strings go here for Rails i18n
+en:
+  label_issue_burndown_chart_menu: Burndown 
+  label_issue_burndown_chart: Burndown Chart
+  project_module_issue_burndown_chart: Issue Burndown Chart plugin
+  msg_start_after_end: end date must be greater than start date
+  msg_invalid_issue_id: Invalid issue id
+  remain: Remaining Effort
+  end_date: End Date
+  ideal_remain: Ideal Efforts Remaining
+  actual_remain: Actual Efforts Remaining

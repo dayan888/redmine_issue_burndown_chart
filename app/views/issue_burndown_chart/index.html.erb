@@ -1,0 +1,88 @@
+<h2> <%=h l :label_issue_burndown_chart %> </h2>
+
+<%= javascript_include_tag "//www.google.com/jsapi", "chartkick" %>
+<script>
+
+var datepickerOptions={dateFormat: 'yy-mm-dd', firstDay: <%= @start_of_week %>, showOn: 'button', buttonImageOnly: true, buttonImage: '/images/calendar.png', showButtonPanel: true, showWeek: true, showOtherMonths: true, selectOtherMonths: true, changeMonth: true, changeYear: true, beforeShow: beforeShowDatePicker};
+
+$(function(){
+
+  $("#start_date").addClass("date").datepicker(datepickerOptions);
+  $("#end_date").addClass("date").datepicker(datepickerOptions);
+
+  $('#form1').submit(function(event) {
+    
+    var valid = true;
+
+    if (!$("input[name='issue_id']").val()) {
+      alert("<%= l(:msg_invalid_issue_id) %>");
+      valid = false;
+    }
+    var startDate = $("input[name='start_date']").val();
+    var endDate = $("input[name='end_date']").val();
+    if (startDate && endDate && startDate > endDate) {
+        alert("<%= l(:msg_start_after_end) %>");
+        valid = false;
+    }
+  
+    if (valid) {
+      $("input[type='submit']").attr("disabled", "disabled");
+      $("#progress").show();
+      $(this).off('submit');
+      $(this).submit();
+    }
+
+    return false;
+    
+  });
+
+});
+
+</script>
+<style>
+
+#progress {
+ display: none;
+ color: #0000ff;
+ font-size: 18px;
+ position: absolute;
+ margin-top: -100px;
+ margin-left: -100px;
+ top: 50%;
+ left: 50%;
+}
+
+input[name='issue_id'] {
+ width: 50px;
+}
+
+</style>
+
+<% if @msg %>
+  <span style="color: red"><%= raw(@msg) %></span>
+  <br>
+<% end %>
+
+<div id="progress">
+  Please wait...
+</div>
+
+<%= form_tag("", :id => "form1") do %>
+<label for="field_issue"><%= l(:field_issue) %></label>&nbsp;
+<input type="number" name="issue_id" value="<%= params[:issue_id] %>" />
+<!--
+<label for="field_calc_base">Based</label>&nbsp;
+<%= select_tag "calc_base", options_for_select([['Remain', 0], ['Progress']]), :prompt => false, :required => true  %>
+-->
+<label for="field_start_date"><%= l(:field_start_date) %></label>&nbsp;
+<%= text_field_tag "start_date", params[:start_date], :size => 10, :disabled => false, :required => false, :pattern=>"(?:19|20)[0-9]{2}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-9])|(?:(?!02)(?:0[1-9]|1[0-2])-(?:30))|(?:(?:0[13578]|1[02])-31))"  %>
+<label for="field_end_date"><%= l(:end_date) %></label>&nbsp;
+<%= text_field_tag "end_date", params[:end_date], :size => 10, :disabled => false, :required => false, :pattern=>"(?:19|20)[0-9]{2}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-9])|(?:(?!02)(?:0[1-9]|1[0-2])-(?:30))|(?:(?:0[13578]|1[02])-31))"  %> 
+
+  <input type="submit" value="<%= l(:button_show) %>" >
+<% end %>
+<br><br>
+
+<% if @chart_data %>
+  <%= line_chart @chart_data, height: "600px", colors: ["green", "red"] , min: 0, max: @max %>
+<% end %>

@@ -1,0 +1,11 @@
+# English strings go here for Rails i18n
+en:
+  label_issue_burndown_chart_menu: バーンダウン 
+  label_issue_burndown_chart: バーンダウンチャート
+  project_module_issue_burndown_chart: チケット単位のバーンダウンチャートプラグイン 
+  msg_start_after_end: 終了日は開始日よりも後にしてください。 
+  msg_invalid_issue_id: 不正なチケットIDです。
+  remain: 残工数
+  end_date: 終了日
+  ideal_remain: 理想残工数
+  actual_remain: 実残工数 
