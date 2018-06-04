@@ -29,11 +29,17 @@ class IssueBurndownChartController < ApplicationController
       issue = Issue.find_by_id(params[:issue_id])
       if issue
         @first_date = issue.start_date
-        @last_date = issue.start_date
+        @last_date = issue.due_date
         @estimate = {}
         @estimate_total = 0
         @issue_ids = []
         id_with_children(issue)
+        if !@first_date || !@last_date || @estimate_total == 0
+          @msg = l(:msg_requires_start_due_date_estimate)
+          render action: "index"
+          return
+        end
+
         cf = IssueCustomField.find_by_name('RemainUmVtYWlu')
 
         @results = Journal.joins(:details).
@@ -52,15 +58,15 @@ class IssueBurndownChartController < ApplicationController
           if (!params[:start_date].to_date || params[:start_date].to_date <= date) and (!params[:end_date].to_date || params[:end_date].to_date >= date)
             dispdate = date.strftime("%-m/%-d")
             @data_ideal << [dispdate, @estimate_total * (period - i) / period]
-            if date <= Time.now
+            if date <= Time.zone.today
               @data_actual << [dispdate, get_remain(date)]
             end
           end
         end
 
         @chart_data = [
-            { name: l(:ideal_remain), data: @data_ideal },
-            { name: l(:actual_remain), data: @data_actual }
+          {name: l(:ideal_remain), data: @data_ideal},
+          {name: l(:actual_remain), data: @data_actual}
         ]
         #puts @chart_data
       else
@@ -88,13 +94,11 @@ private
       latest = @estimate[id]
       @results.each do |result|
         if result.issue_id == id
-          if result.created < date
-            latest = result.val.to_i
-          end
           if result.created.strftime("%-m/%-d") == date.strftime("%-m/%-d")
             latest = result.val.to_i
-          end 
-          if result.created > date
+          elsif result.created < date
+            latest = result.val.to_i
+          elsif result.created > date
             break
           end
         end
@@ -110,8 +114,8 @@ private
     @estimate[issue.id] = issue.estimated_hours
     @estimate_total += issue.estimated_hours if issue.estimated_hours
     @issue_ids << issue.id
-    @start_date = issue.start_date if issue.start_date < @first_date
-    @last_date = issue.due_date if issue.due_date > @first_date
+    @first_date = issue.start_date if issue.start_date && issue.start_date < @first_date
+    @last_date = issue.due_date if issue.due_date && issue.due_date > @last_date
     if issue.children?
        issue.children.each {|i|
          id_with_children(i)

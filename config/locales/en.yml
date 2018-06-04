@@ -5,6 +5,7 @@ en:
   project_module_issue_burndown_chart: Issue Burndown Chart plugin
   msg_start_after_end: end date must be greater than start date
   msg_invalid_issue_id: Invalid issue id
+  msg_requires_start_due_date_estimate: Start date, due date and estimate on issue are all required for the chart to be seen.
   remain: Remaining Effort
   end_date: End Date
   ideal_remain: Ideal Efforts Remaining

@@ -67,22 +67,22 @@ input[name='issue_id'] {
   Please wait...
 </div>
 
-<%= form_tag("", :id => "form1") do %>
-<label for="field_issue"><%= l(:field_issue) %></label>&nbsp;
-<input type="number" name="issue_id" value="<%= params[:issue_id] %>" />
-<!--
-<label for="field_calc_base">Based</label>&nbsp;
-<%= select_tag "calc_base", options_for_select([['Remain', 0], ['Progress']]), :prompt => false, :required => true  %>
--->
-<label for="field_start_date"><%= l(:field_start_date) %></label>&nbsp;
-<%= text_field_tag "start_date", params[:start_date], :size => 10, :disabled => false, :required => false, :pattern=>"(?:19|20)[0-9]{2}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-9])|(?:(?!02)(?:0[1-9]|1[0-2])-(?:30))|(?:(?:0[13578]|1[02])-31))"  %>
-<label for="field_end_date"><%= l(:end_date) %></label>&nbsp;
-<%= text_field_tag "end_date", params[:end_date], :size => 10, :disabled => false, :required => false, :pattern=>"(?:19|20)[0-9]{2}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-9])|(?:(?!02)(?:0[1-9]|1[0-2])-(?:30))|(?:(?:0[13578]|1[02])-31))"  %> 
+<%= form_tag({:controller => 'issue_burndown_chart', :action => 'create'}, :id => "form1") do %>
+  <label for="field_issue"><%= l(:field_issue) %></label>&nbsp;
+  <input type="number" name="issue_id" value="<%= params[:issue_id] %>" />
+  <!--
+  <label for="field_calc_base">Based</label>&nbsp;
+  <%= select_tag "calc_base", options_for_select([['Remain', 0], ['Progress']]), :prompt => false, :required => true  %>
+  -->
+  <label for="field_start_date"><%= l(:field_start_date) %></label>&nbsp;
+  <%= text_field_tag "start_date", params[:start_date], :size => 10, :disabled => false, :required => false, :pattern=>"(?:19|20)[0-9]{2}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-9])|(?:(?!02)(?:0[1-9]|1[0-2])-(?:30))|(?:(?:0[13578]|1[02])-31))"  %>
+  <label for="field_end_date"><%= l(:end_date) %></label>&nbsp;
+  <%= text_field_tag "end_date", params[:end_date], :size => 10, :disabled => false, :required => false, :pattern=>"(?:19|20)[0-9]{2}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-9])|(?:(?!02)(?:0[1-9]|1[0-2])-(?:30))|(?:(?:0[13578]|1[02])-31))"  %> 
 
   <input type="submit" value="<%= l(:button_show) %>" >
 <% end %>
 <br><br>
 
 <% if @chart_data %>
-  <%= line_chart @chart_data, height: "600px", colors: ["green", "red"] , min: 0, max: @max %>
+  <%= line_chart @chart_data, height: "600px", colors: ["green", "red"] , min: 0, max: @max, curve: false %>
 <% end %>
