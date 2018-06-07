@@ -6,6 +6,12 @@ The field name is like RemainXXXX in order to avoid naming conflict.
 When you enable this module for a project, you can input the remaining effort on an issue.
 The burdown chart uses estimate effort and remaining efforts that should be updated if you make progress.
 
+In short,
+when you create an issue you have to set start date, due date and estimate,
+when you add a child issue you have to set at least estimate.
+Daily whenever you make a progress or re-estimate remaining effort you have to update remaining effort on each issue.
+
+
 == Installation
 
 * Clone into your plugins folder: <code>git clone https://github.com/dayan888/redmine_issue_burndown_chart.git</code>
@@ -13,3 +19,12 @@ The burdown chart uses estimate effort and remaining efforts that should be upda
 * Run <code>bundle exec rake redmine:plugins:migrate RAILS_ENV=production</code>
 * Restart Redmine
 
+To be correctly calculate date in your time zone, you have to set your time zone at the following file.
+
+  config/environments/production.rb
+
+like
+
+  config.time_zone = 'Asia/Tokyo'
+
+before end

@@ -56,6 +56,10 @@ input[name='issue_id'] {
  width: 50px;
 }
 
+.center {
+  text-align: center;
+}
+
 </style>
 
 <% if @msg %>
@@ -84,5 +88,6 @@ input[name='issue_id'] {
 <br><br>
 
 <% if @chart_data %>
-  <%= line_chart @chart_data, height: "600px", colors: ["green", "red"] , min: 0, max: @max, curve: false %>
+  <h3 class="center"><a href="../../../../issues/<%= @issue.id %>"><%= @issue.subject %></h3>
+  <%= line_chart @chart_data, colors: ["green", "red"] , min: 0, max: @max, curve: false %>
 <% end %>

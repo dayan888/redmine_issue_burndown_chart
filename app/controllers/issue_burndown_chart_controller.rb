@@ -26,14 +26,14 @@ class IssueBurndownChartController < ApplicationController
 
     begin
 
-      issue = Issue.find_by_id(params[:issue_id])
-      if issue
-        @first_date = issue.start_date
-        @last_date = issue.due_date
+      @issue = Issue.find_by_id(params[:issue_id])
+      if @issue && @issue.project_id == @project.id
+        @first_date = @issue.start_date
+        @last_date = @issue.due_date
         @estimate = {}
         @estimate_total = 0
         @issue_ids = []
-        id_with_children(issue)
+        id_with_children(@issue)
         if !@first_date || !@last_date || @estimate_total == 0
           @msg = l(:msg_requires_start_due_date_estimate)
           render action: "index"
@@ -114,8 +114,8 @@ private
     @estimate[issue.id] = issue.estimated_hours
     @estimate_total += issue.estimated_hours if issue.estimated_hours
     @issue_ids << issue.id
-    @first_date = issue.start_date if issue.start_date && issue.start_date < @first_date
-    @last_date = issue.due_date if issue.due_date && issue.due_date > @last_date
+    @first_date = issue.start_date if issue.start_date && @first_date && issue.start_date < @first_date
+    @last_date = issue.due_date if issue.due_date && @last_date && issue.due_date > @last_date
     if issue.children?
        issue.children.each {|i|
          id_with_children(i)
