@@ -3,7 +3,7 @@
 
 class IssueBurndownChartController < ApplicationController
   include Redmine::I18n
-  unloadable
+  unloadable if Rails.env.production?
   before_filter :find_project, :authorize
   menu_item :issue_burndown_chart
   

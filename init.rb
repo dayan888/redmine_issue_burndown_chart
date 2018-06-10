@@ -12,10 +12,12 @@ Redmine::Plugin.register :redmine_issue_burndown_chart do
   menu :project_menu, :issue_burndown_chart, { :controller => :issue_burndown_chart, :action => :index }, :caption => :label_issue_burndown_chart_menu, :param => :project_id
 end
 
-ActionDispatch::Callbacks.to_prepare do
-    unless ProjectsController.included_modules.include?(ProjectsControllerPatch)
-        ProjectsController.send(:include, ProjectsControllerPatch)
-    end
+if Rails.env.production?
+  ActionDispatch::Callbacks.to_prepare do
+      unless ProjectsController.included_modules.include?(ProjectsControllerPatch)
+          ProjectsController.send(:include, ProjectsControllerPatch)
+      end
+  end
 end
 
 require_dependency 'remain_hooks'

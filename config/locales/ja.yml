@@ -1,5 +1,4 @@
-# English strings go here for Rails i18n
-en:
+ja:
   label_issue_burndown_chart_menu: バーンダウン 
   label_issue_burndown_chart: バーンダウンチャート
   project_module_issue_burndown_chart: チケット単位のバーンダウンチャートプラグイン 
