@@ -4,16 +4,22 @@
 <%= javascript_tag do %>
 
   $(function() {
+    updateIssueFrom = (function() {
+    var cached_function = updateIssueFrom;
+      return function(str) {
+        cached_function.apply(this, arguments); // use .apply() to call it
+        var count = 0;
+        var interval = setInterval(function() {
+          count++;
+          if (!changeRemainWord() && !$("#ajax-indicator").is(':visible') && count > 10) {
+            clearInterval(interval);
+          }
+        }, 100);
+      };
+    }());
+
+    changeRemainWord();
     var cfId = <%= IssueCustomField.find_by_name('RemainUmVtYWlu').id %>;
-    var org = "RemainUmVtYWlu";
-    var remain = "<%= l(:remain) %>";
-    ["a", "label", "span", "option", "strong"].forEach(function(val, i) {
-      $(val + ":contains('" + org + "')").each(function() {
-        if($(this).contents().last().text().includes(org)) {
-          $(this).contents().last().replaceWith(remain);
-        }
-      });
-    });
     $("td.cf_" + cfId).each(function() {
       var id = $(this).parent().find("input[name='ids[]']").val();
       var txt = $(this).text();
@@ -28,5 +34,20 @@
     });
     <% end %>
   });
+
+  var changeRemainWord = function() {
+    var org = "RemainUmVtYWlu";
+    var remain = "<%= l(:remain) %>";
+    var found = false;
+    ["a", "label", "span", "option", "strong"].forEach(function(val, i) {
+      $(val + ":contains('" + org + "')").each(function() {
+        if($(this).contents().last().text().includes(org)) {
+          found = true;
+          $(this).contents().last().replaceWith(remain);
+        }
+      });
+    });
+    return found;
+  };
 
 <% end %>
